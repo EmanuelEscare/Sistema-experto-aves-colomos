@@ -121,7 +121,7 @@
 @if ($this->nuevaAve == true)
 <h1 class="m-5"> Ave no encontrada</h1>
 
-    <livewire:subir-img />
+    {{-- <livewire:subir-img /> --}}
 @endif
 
 
