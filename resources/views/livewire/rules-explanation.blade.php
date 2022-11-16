@@ -1,7 +1,4 @@
 <div>
-    <link rel="stylesheet" href="../css/style.css">
-
-
     {{-- Stop trying to control. --}}
     @if ($paso[3] == false)
     <div class="card shadow rounded-4 border-0">
@@ -90,7 +87,7 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="text-center">
-                            <img src="https://www.hogarmania.com/archivos/201911/aves-848x477x80xX.jpg"
+                            <img src=""
                                 class="img-fluid rounded" alt="...">
                         </div>
                     </div>
