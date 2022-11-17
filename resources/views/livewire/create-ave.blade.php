@@ -88,6 +88,12 @@
                             <span class="my-3 text-danger">{{ $message }}</span>
                         @enderror
                         <br>
+                        <p class="mt-1">Imagen del ave</p>
+                        <input class="form-control form-control-lg" type="file" wire:model="img">
+                        @error('imagen')
+                            <span class="my-3 text-danger">{{ $message }}</span>
+                        @enderror
+                        <br>
                         <p>Familias</p>
                         <select class="form-control form-control-lg" wire:model="familia">
                             <option value="">...</option>
@@ -123,7 +129,7 @@
         </div>
     </div>
 
-    <div class="card mt-4">
+    <div class="card bg-white overflow-hidden shadow-sm sm:rounded-lg border-0 mt-4">
 
         <div class="m-4">
             <input type="text" class="form-control form-control-lg">
@@ -136,6 +142,7 @@
                         <th class="text-center" scope="col">ID</th>
                         <th class="text-center" scope="col">NOMBRE</th>
                         <th class="text-center" scope="col">FAMILIA</th>
+                        <th class="text-center" scope="col">IMAGEN</th>
                         <th class="text-center" scope="col">ACCIONES</th>
                     </tr>
                 </thead>
@@ -145,6 +152,11 @@
                             <td>{{ $ave->id }}</td>
                             <td>{{ $ave->nombre }}</td>
                             <td>{{ $ave->familia->nombre }}</td>
+                            <td>
+                                <a href="{{asset('storage/'.$ave->img) }}" target="__blank">
+                                <img  style="margin: auto; max-width: 150px;" src="{{asset('storage/'.$ave->img) }}" alt="">
+                                </a>
+                            </td>
                             <td class="text-center">
                                 {{-- <button type="button" wire:click="update({{$ave->id}})" class="btn btn-secondary">Editar</button> --}}
                                 <button type="button" wire:click="openHabitas({{ $ave->id }})"

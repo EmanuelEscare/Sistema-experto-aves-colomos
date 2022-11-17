@@ -53,7 +53,7 @@
             </div>
         </div>
     
-        <div class="card mt-4">
+        <div class="card bg-white overflow-hidden shadow-sm sm:rounded-lg border-0 mt-4">
     
             <div class="m-4">
                 {{-- <input type="text" class="form-control form-control-lg"> --}}

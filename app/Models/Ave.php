@@ -9,7 +9,7 @@ class Ave extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['id','nombre', 'mide', 'familia_id'];
+    protected $fillable = ['id','nombre', 'mide', 'img', 'familia_id'];
 
     public function familia()
     {

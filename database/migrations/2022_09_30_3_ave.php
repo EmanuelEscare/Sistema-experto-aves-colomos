@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->integer('mide');
+            $table->string('img')->nullable();
             $table->foreignId('familia_id')->references('id')->on('familias')->onDelete('cascade');
             $table->timestamps();
         });

@@ -9,14 +9,18 @@ use App\Models\Habita;
 use App\Models\Habitat_ave;
 use App\Models\Habitatave;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class CreateAve extends Component
 {
-    public $aves, $nombre, $ave, $familias, $familia, $habitas, $mide; 
+    use WithFileUploads;
+
+    public $aves, $nombre, $ave, $familias, $familia, $habitas, $mide, $img; 
 
     protected $rules = [
         'nombre' => 'required|min:5',
         'familia' => 'required',
+        'img' => 'required|image',
         'mide' => 'required'
     ];
 
@@ -43,9 +47,13 @@ class CreateAve extends Component
     public function create(){
         $this->validate();
         
+        $url = $this->img->store('public/aves');
+        $url = substr($url, 7);
+
         Ave::create([
             'nombre' => $this->nombre,
             'mide' => $this->mide,
+            'img' =>  $url,
             'familia_id' => $this->familia,
         ]);
         $this->dispatchBrowserEvent('notification');
