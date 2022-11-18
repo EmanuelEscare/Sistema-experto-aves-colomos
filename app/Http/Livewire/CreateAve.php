@@ -16,17 +16,21 @@ class CreateAve extends Component
     use WithFileUploads;
 
     public $aves, $nombre, $ave, $familias, $familia, $habitas, $mide, $img; 
+    public $confirming;
+    
+    public $modelAve; 
 
     protected $rules = [
-        'nombre' => 'required|min:5',
-        'familia' => 'required',
+        'modelAve.nombre' => 'required|min:5',
+        'modelAve.familia_id' => 'required',
         'img' => 'required|image',
-        'mide' => 'required'
+        'modelAve.mide' => 'required'
     ];
 
     public function mount(){
         $this->aves = Ave::all();
         $this->ave = new Ave;
+        $this->modelAve = new Ave;
 
         $this->Atributtes = [];
         $this->habitas = [];
@@ -46,15 +50,15 @@ class CreateAve extends Component
 
     public function create(){
         $this->validate();
-        
+
         $url = $this->img->store('public/aves');
         $url = substr($url, 7);
 
         Ave::create([
-            'nombre' => $this->nombre,
-            'mide' => $this->mide,
+            'nombre' => $this->modelAve->nombre,
+            'mide' => $this->modelAve->mide,
             'img' =>  $url,
-            'familia_id' => $this->familia,
+            'familia_id' => $this->modelAve->familia_id,
         ]);
         $this->dispatchBrowserEvent('notification');
         $this->dispatchBrowserEvent('closeModal');
@@ -67,8 +71,29 @@ class CreateAve extends Component
         $this->mount();
     }
 
-    public function update($id){
+    public function confirmDelete($id)
+    {
+        $this->confirming = $id;
+    }
 
+    public function update(){
+        $this->validate();
+
+        $url = $this->img->store('public/aves');
+        $url = substr($url, 7);
+
+        $this->modelAve->img = $url;
+        $this->modelAve->save();
+        $this->modelAve = new Ave;
+        $this->dispatchBrowserEvent('notification');
+        $this->dispatchBrowserEvent('ECModal');
+        $this->mount();
+    }
+
+    public function modalUpdate($id){
+        $this->modelAve = $this->modelAve->find($id);
+        $this->familias = Familia::get();
+        $this->dispatchBrowserEvent('editModal');
     }
 
     // MODULE ATTRIBUTES

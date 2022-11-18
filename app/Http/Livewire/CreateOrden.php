@@ -7,15 +7,21 @@ use App\Models\Ordene;
 
 class CreateOrden extends Component
 {
-    public $ordenes, $nombre, $orden; 
+    public $ordenes, $nombre, $orden;
+    public $confirming;
+    
+    public $editId, $modelOrden; 
 
     protected $rules = [
-        'nombre' => 'required|min:5',
+        'modelOrden.nombre' => 'required|min:5',
     ];
 
     public function mount(){
         $this->ordenes = Ordene::all();
         $this->orden = new Ordene;
+        $this->editId = null;
+
+        $this->modelOrden = new Ordene;
     }
 
     public function render()
@@ -24,7 +30,7 @@ class CreateOrden extends Component
     }
 
     public function createModal(){
-        $this->nombre = null;
+        $this->modelOrden->nombre = null;
         $this->dispatchBrowserEvent('openModal');
     }
 
@@ -32,7 +38,7 @@ class CreateOrden extends Component
         $this->validate();
         
         Ordene::create([
-            'nombre' => $this->nombre,
+            'nombre' => $this->modelOrden->nombre,
         ]);
         $this->dispatchBrowserEvent('notification');
         $this->dispatchBrowserEvent('closeModal');
@@ -45,8 +51,22 @@ class CreateOrden extends Component
         $this->mount();
     }
 
-    public function update($id){
+    public function confirmDelete($id)
+    {
+        $this->confirming = $id;
+    }
 
+    public function update(){
+        $this->modelOrden->save();
+        $this->modelOrden->nombre = null;
+        $this->dispatchBrowserEvent('notification');
+        $this->dispatchBrowserEvent('ECModal');
+        $this->mount();
+    }
+
+    public function modalUpdate($id){
+        $this->modelOrden = $this->modelOrden->find($id);
+        $this->dispatchBrowserEvent('editModal');
     }
 
 }

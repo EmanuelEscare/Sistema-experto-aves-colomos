@@ -28,19 +28,61 @@
                         <h2 class="my-4">Crear Familia</h2>
 
                         <p class="mt-1">Nombre</p>
-                        <input class="form-control form-control-lg" type="text" wire:model="nombre">
-                        @error('nombre')
-                            <span class="my-3 text-danger">{{ $message }}</span>
+                        <input class="form-control form-control-lg" type="text" wire:model="modelFamilia.nombre">
+                        @error('modelFamilia.nombre')
+                            <span class="my-3 text-danger">Ingrese un nombre con mínimo 5 caracteres</span>
                         @enderror
                         <br>
                         <p>Orden</p>
-                        <select class="form-control form-control-lg" wire:model="orden">
+                        <select class="form-control form-control-lg" wire:model="modelFamilia.orden_id">
                             <option value="">....</option>
                             @foreach ($ordenes as $item)
                                 <option value="{{ $item->id }}">{{ $item->nombre }}</option>
                             @endforeach
                         </select>
-                        @error('orden')
+                        @error('modelFamilia.orden_id')
+                            <span class="my-3 text-danger">Seleccione una orden</span>
+                        @enderror
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-success">Guardar</button>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+
+    {{-- Edit Modal --}}
+    <div class="modal fade" wire:ignore.self id="editModal" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+
+            <form wire:submit.prevent="update">
+
+                <div class="modal-content">
+
+                    <div class="modal-body">
+                        <h2 class="my-4">Crear Familia</h2>
+
+                        <p class="mt-1">Nombre</p>
+                        <input class="form-control form-control-lg" type="text" wire:model="modelFamilia.nombre">
+                        @error('nombre')
+                            <span class="my-3 text-danger">{{ $message }}</span>
+                        @enderror
+                        <br>
+                        <p>Orden</p>
+                        <select class="form-control form-control-lg" wire:model="modelFamilia.orden_id">
+                            <option value="">....</option>
+                            @foreach ($ordenes as $item)
+                                <option value="{{ $item->id }}">{{ $item->nombre }}</option>
+                            @endforeach
+                        </select>
+                        @error('orden_id')
                             <span class="my-3 text-danger">{{ $message }}</span>
                         @enderror
 
@@ -70,9 +112,7 @@
 
     <div class="card bg-white overflow-hidden shadow-sm sm:rounded-lg border-0 mt-4">
 
-        <div class="m-4">
-            <input type="text" class="form-control form-control-lg">
-        </div>
+
 
         <div class="m-4">
             <table class="table table-striped table-hover table-bordered">
@@ -91,9 +131,15 @@
                             <td>{{ $familia->nombre }}</td>
                             <td>{{ $familia->orden->nombre }}</td>
                             <td class="text-center">
-                                {{-- <button type="button" wire:click="update({{$familia->id}})" class="btn btn-secondary">Editar</button> --}}
-                                <button type="button" wire:click="delete({{ $familia->id }})"
-                                    class="btn btn-danger">Eliminar</button>
+                                @if ($confirming === $familia->id)
+                                    <button type="button" wire:click="delete({{ $familia->id }})"
+                                        class="btn btn-danger">¿Seguro?</button>
+                                @else
+                                    <button type="button" wire:click="confirmDelete({{ $familia->id }})"
+                                        class="btn btn-danger">Eliminar</button>
+                                @endif
+                                <button type="button" wire:click="modalUpdate({{ $familia->id }})"
+                                    class="btn btn-primary">Editar</button>
                             </td>
                         </tr>
                     @endforeach
@@ -117,6 +163,17 @@
     <script>
         window.addEventListener('notification', event => {
             $("#notification").toast('show');
+        })
+    </script>
+
+    <script>
+        window.addEventListener('editModal', event => {
+            $("#editModal").modal('show');
+        })
+    </script>
+    <script>
+        window.addEventListener('ECModal', event => {
+            $("#editModal").modal('hide');
         })
     </script>
 </div>
